@@ -23,14 +23,14 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: ${{ env.JAVA_DISTRO }}
 
-      - name: Generate back-end sbom
+      - name: Generate sbom
         working-directory: ./backend/application
         env:
           PASSWORD: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mvn org.cyclonedx:cyclonedx-maven-plugin:2.7.8:makeAggregateBom  --settings ../../settings.xml
 
-      - name: Upload back-end sbom artifact
+      - name: Upload sbom
         uses: actions/upload-artifact@v3
         with:
           name: backend-end-sbom.json
