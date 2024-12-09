@@ -23,3 +23,9 @@ jobs:
         working-directory: ./backend/application
         run: |
           mvn org.cyclonedx:cyclonedx-maven-plugin:2.7.8:makeAggregateBom  --settings ../../settings.xml
+
+      - name: Upload back-end sbom artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend-end-sbom.json
+          path: ./backend/application/target/bom.json
