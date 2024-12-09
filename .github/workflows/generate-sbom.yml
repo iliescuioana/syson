@@ -1,13 +1,13 @@
 name: Generate SBOM
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - workflow-dev-test
-  workflow_dispatch:
 
 jobs:
-  generate-sbom:
+  generate-backend-sbom:
     runs-on: ubuntu-latest
     steps:
       - name: Print test message
