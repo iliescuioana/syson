@@ -21,6 +21,8 @@ jobs:
 
       - name: Generate back-end sbom
         working-directory: ./backend/application
+        env:
+          PASSWORD: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mvn org.cyclonedx:cyclonedx-maven-plugin:2.7.8:makeAggregateBom  --settings ../../settings.xml
 
