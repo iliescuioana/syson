@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  generate-backend-sbom:
+  generate-sbom:
     runs-on: ubuntu-latest
     steps:
-      - name: Test print
+      - name: Print test message
         run: |
           echo "Hello World"
