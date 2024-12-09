@@ -1,6 +1,9 @@
 name: Generate SBOM
 
 on:
+  push:
+    branches:
+      - workflow-dev-test
   workflow_dispatch:
 
 jobs:
