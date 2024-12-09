@@ -6,6 +6,10 @@ on:
       - workflow-dev-test
   workflow_dispatch:
 
+env:
+  JAVA_VERSION: '17'
+  JAVA_DISTRO: 'temurin'
+
 jobs:
   generate-backend-sbom:
     runs-on: ubuntu-latest
@@ -16,8 +20,8 @@ jobs:
       - name: Setup Java SDK
         uses: actions/setup-java@v4
         with:
-          java-version: 17
-          distribution: "temurin"
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRO }}
 
       - name: Generate back-end sbom
         working-directory: ./backend/application
