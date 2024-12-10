@@ -17,7 +17,7 @@ permissions:
   contents: read
 
 jobs:
-  generate-backend-sbom:
+  generate-sbom:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -38,5 +38,5 @@ jobs:
       - name: Upload sbom
         uses: actions/upload-artifact@v3
         with:
-          name: backend-end-sbom.json
-          path: ${{ env.PRODUCT_PATH }}/target/${{ env.SBOM_NAME }}
+          name: ${{ env.SBOM_NAME }}
+          path: ${{ env.PRODUCT_PATH }}/target/sbom.json
