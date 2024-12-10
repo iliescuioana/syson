@@ -39,4 +39,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.SBOM_NAME }}
-          path: ${{ env.PRODUCT_PATH }}/target/sbom.json
+          path: ${{ env.PRODUCT_PATH }}/target/bom.json
