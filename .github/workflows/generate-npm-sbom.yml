@@ -32,14 +32,9 @@ jobs:
           registry-url: ${{ env.REGISTRY_URL }}
           
       - name: Setup required credentials and flags
-        env:
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "//npm.pkg.github.com/:_authToken=$TOKEN" >> .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ github.token }}" >> .npmrc
           echo "CI=true" >> $GITHUB_ENV
-
-      - name: Install dependencies
-        run: |
           cd ${{ env.PRODUCT_PATH }}
           npm ci
           npm run build
