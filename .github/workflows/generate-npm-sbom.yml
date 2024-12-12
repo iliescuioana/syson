@@ -33,8 +33,12 @@ jobs:
           
       - name: Setup required credentials and flags
         run: |
+          cat .npmrc
           echo "//npm.pkg.github.com/:_authToken=${{ github.token }}" >> .npmrc
           echo "CI=true" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: |
           cd ${{ env.PRODUCT_PATH }}
           npm ci
           npm run build
