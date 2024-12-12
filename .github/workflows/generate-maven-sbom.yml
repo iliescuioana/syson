@@ -1,10 +1,12 @@
 name: Generate Maven SBOM
 
-# WIP: events 
 on:
   push:
-    branches:
-      - workflow-dev-test
+    branches: 
+      - "main"
+      - "workflow-dev-test" # TODO: remove
+    paths:
+      - 'backend/application/**/pom.xml'
   workflow_dispatch:
 
 env:
