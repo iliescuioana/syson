@@ -33,7 +33,7 @@ jobs:
           
       - name: Setup required credentials and flags
         env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "//npm.pkg.github.com/:_authToken=$NODE_AUTH_TOKEN" >> .npmrc
           echo "CI=true" >> $GITHUB_ENV
