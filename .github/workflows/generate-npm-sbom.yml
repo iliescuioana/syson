@@ -3,8 +3,12 @@ name: Generate NPM SBOM
 # WIP: events 
 on:
   push:
-    branches:
-      - workflow-dev-test
+    branches: 
+      - "main"
+      - "workflow-dev-test"
+    paths:
+      - "package.json"
+      - "package-lock.json"
   workflow_dispatch:
 
 env:
@@ -15,11 +19,13 @@ env:
 
 permissions:
   contents: read
-  packages: read
 
 jobs:
   generate-sbom:
+    name: Generate SBOM
     runs-on: ubuntu-latest
+    permissions:
+      packages: read
     
     steps:
       - name: Checkout repository
@@ -36,7 +42,6 @@ jobs:
           echo "//npm.pkg.github.com/:_authToken=${{ github.token }}" >> .npmrc
           echo "CI=true" >> $GITHUB_ENV
           npm ci
-          npm run build
 
       - name: Install cyclonedx-npm
         run: |
