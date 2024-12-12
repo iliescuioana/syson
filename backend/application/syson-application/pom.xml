@@ -22,7 +22,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.eclipse.syson</groupId>
-	<artifactId>syson-application</artifactId>
+	<artifactId>syson-applicationn</artifactId>
 	<version>2024.11.0</version>
 	<name>syson-application</name>
 	<description>SysON Application</description>
