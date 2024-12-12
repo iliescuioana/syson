@@ -4,7 +4,7 @@ name: Generate NPM SBOM
 on:
   push:
     branches:
-      - main
+      - workflow-dev-test
   workflow_dispatch:
 
 env:
