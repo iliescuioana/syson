@@ -1,0 +1,54 @@
+name: Generate NPM SBOM
+
+# WIP: events 
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '18.7'
+  REGISTRY_URL: 'https://npm.pkg.github.com/'
+  SBOM_NAME: 'frontend.json'
+  PRODUCT_PATH: './'
+  PLUGIN_VERSION: '2.1.0'
+
+permissions:
+  contents: read
+
+jobs:
+  generate-sbom:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node SDK
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: ${{ env.REGISTRY_URL }}
+          
+      - name: Setup required credentials and flags
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
+          echo "CI=true" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: |
+          cd ${{ env.PRODUCT_PATH }}
+          npm ci
+          npm run build
+
+      - name: Generate SBOM
+        run: |
+          cd ${{ env.PRODUCT_PATH }}
+          cyclonedx-npm --output-format json --output-file sbom.json
+          
+      - name: Upload SBOM as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.SBOM_NAME }}
+          path: ${{ env.PRODUCT_PATH }}/sbom.json
