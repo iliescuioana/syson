@@ -4,7 +4,7 @@ on:
   push:
     branches: 
       - "main"
-      - "workflow-dev-test"
+      - "workflow-dev-test"  # TODO: remove 
     paths:
       - "package.json"
       - "package-lock.json"
