@@ -33,7 +33,7 @@ jobs:
           
       - name: Setup required credentials and flags
         run: |
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ github.token }}" >> .npmrc
           echo "CI=true" >> $GITHUB_ENV
 
       - name: Install dependencies
