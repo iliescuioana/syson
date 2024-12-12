@@ -1,6 +1,5 @@
 name: Generate NPM SBOM
 
-# WIP: events 
 on:
   push:
     branches: 
