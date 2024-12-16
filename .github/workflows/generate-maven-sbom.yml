@@ -47,7 +47,7 @@ jobs:
           path: ${{ env.PRODUCT_PATH }}/target/bom.json
 
   upload-sbom:
-    if: github.repository == 'iliescuioana/syson' # TODO: edit
+    if: github.repository == 'iliescuioana/syson' # TODO:edit
     runs-on: ubuntu-latest
     needs: [ 'generate-sbom' ]
     steps:
