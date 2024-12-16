@@ -39,6 +39,7 @@ jobs:
           PASSWORD: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mvn org.cyclonedx:cyclonedx-maven-plugin:$PLUGIN_VERSION:$SBOM_TYPE -f "$PRODUCT_PATH/pom.xml" --settings settings.xml
+          echo $REPO_NAME
 
       - name: Upload sbom
         uses: actions/upload-artifact@v4
@@ -47,7 +48,7 @@ jobs:
           path: ${{ env.PRODUCT_PATH }}/target/bom.json
 
   upload-sbom:
-    if: github.repository == '$REPO_NAME'
+    if: github.repository == $REPO_NAME
     runs-on: ubuntu-latest
     needs: [ 'generate-sbom' ]
     steps:
