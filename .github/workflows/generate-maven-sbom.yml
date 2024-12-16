@@ -12,7 +12,7 @@ on:
 env:
   JAVA_VERSION: '17'
   JAVA_DISTRO: 'temurin'
-  PRODUCT_NAME: 'backend_application'
+  PRODUCT_NAME: 'application'
   PRODUCT_PATH: 'backend/application'
   PLUGIN_VERSION: '2.7.8'
   SBOM_NAME: 'backend_application_sbom.json'
@@ -47,7 +47,7 @@ jobs:
           path: ${{ env.PRODUCT_PATH }}/target/bom.json
 
   upload-sbom:
-    if: github.repository == 'iliescuioana/syson'
+    if: github.repository == 'iliescuioana/syson' # TODO: edit
     runs-on: ubuntu-latest
     needs: [ 'generate-sbom' ]
     steps:
@@ -60,5 +60,12 @@ jobs:
         run: |
           VERSION="$(jq -r '.metadata.component.version' < bom.json)"
           echo "version=$(echo ${VERSION})" >> $GITHUB_OUTPUT
-          echo $VERSION
-          echo $PRODUCT_NAME
+      - uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5 # v3.1.0
+        with:
+          serverHostname: 'sbom.eclipse.org'
+          apiKey: ${{ secrets.DEPENDENCY_TRACK_API_KEY }}
+          projectName: $PRODUCT_NAME
+          projectVersion: ${{ steps.version.outputs.version }}
+          bomFilename: 'bom.json'
+          parent: '5ff00cf9-9edd-4c44-b601-a332664f3ec5'
+          autoCreate: true
