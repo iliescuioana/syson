@@ -64,7 +64,7 @@ jobs:
         with:
           serverHostname: 'sbom.eclipse.org'
           apiKey: ${{ secrets.DEPENDENCY_TRACK_API_KEY }}
-          projectName: $PRODUCT_NAME
+          projectName: ${{ env.PRODUCT_NAME }}
           projectVersion: ${{ steps.version.outputs.version }}
           bomFilename: 'bom.json'
           parent: '5ff00cf9-9edd-4c44-b601-a332664f3ec5'
