@@ -5,16 +5,17 @@ on:
     branches: 
       - "main"
       - "workflow-dev-test"  # TODO: remove 
-    paths:
-      - "package.json"
-      - "package-lock.json"
+    # paths:
+    #   - "package.json"
+    #   - "package-lock.json"
   workflow_dispatch:
 
 env:
   NODE_VERSION: '18.7'
   REGISTRY_URL: 'https://npm.pkg.github.com/'
-  SBOM_NAME: 'frontend.json'
+  PRODUCT_NAME: 'frontend'
   PRODUCT_PATH: './'
+  SBOM_NAME: 'frontend.json'
 
 permissions:
   contents: read
@@ -48,10 +49,34 @@ jobs:
 
       - name: Generate SBOM
         run: |
-          cyclonedx-npm --output-format json --output-file sbom.json
+          cyclonedx-npm --output-format json --output-file bom.json
           
       - name: Upload SBOM as artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.SBOM_NAME }}
-          path: ${{ env.PRODUCT_PATH }}/sbom.json
+          path: ${{ env.PRODUCT_PATH }}/bom.json
+
+  upload-sbom:
+    if: github.repository == 'iliescuioana/syson' # TODO: edit
+    runs-on: ubuntu-latest
+    needs: [ 'generate-sbom' ]
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.SBOM_NAME }}
+
+      - name: Extract version
+        id: version
+        run: |
+          VERSION="$(jq -r '.metadata.component.version' < bom.json)"
+          echo "version=$(echo ${VERSION})" >> $GITHUB_OUTPUT
+      - uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5 # v3.1.0
+        with:
+          serverHostname: 'sbom.eclipse.org'
+          apiKey: ${{ secrets.DEPENDENCY_TRACK_API_KEY }}
+          projectName: ${{ env.PRODUCT_NAME }}
+          projectVersion: ${{ steps.version.outputs.version }}
+          bomFilename: 'bom.json'
+          parent: '1b099ee7-62ee-48e1-986b-b7f0309dd344'
+          autoCreate: true
