@@ -57,6 +57,5 @@ jobs:
       - name: Extract version
         id: version
         run: |
-          ls -R
-          VERSION="$(jq -r '.metadata.component.version' < $SBOM_NAME)"
+          VERSION="$(jq -r '.metadata.component.version' < bom.json)"
           echo "version=$(echo ${VERSION})" >> $GITHUB_OUTPUT
