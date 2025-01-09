@@ -7,7 +7,14 @@ on:
       - "workflow-dev-test" # TODO: remove 
     paths:
       - 'backend/application/**/pom.xml'
+    tags:
+      - "v*"
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version'
+        default: 'main'
+        required: true
 
 env:
   JAVA_VERSION: '17'
@@ -27,6 +34,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.inputs.version }}
 
       - name: Setup Java SDK
         uses: actions/setup-java@v4
@@ -58,8 +68,24 @@ jobs:
       - name: Extract version
         id: version
         run: |
+          event="${{ github.event_name }}"
+          ref="${{ github.ref }}"
+          input="${{ github.event.inputs.version }}"
+
           VERSION="$(jq -r '.metadata.component.version' < bom.json)"
+
+          if [[ "$event" == "push" && "$ref" == refs/heads/* ]] || \
+            [[ "$event" == "workflow_dispatch" && ! "$input" =~ ^v ]]; then
+            VERSION="${VERSION}@dev"
+          fi
+
           echo "version=$(echo ${VERSION})" >> $GITHUB_OUTPUT
+          
+          echo "Event: $event"
+          echo "Ref: $ref"
+          echo "Input: $input"
+          echo "Version: $VERSION"
+
       - uses: DependencyTrack/gh-upload-sbom@48feab3080ff9e8f51f4d21861d9fc914eb744f5 # v3.1.0
         with:
           serverHostname: 'sbom.eclipse.org'
